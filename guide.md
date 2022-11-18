@@ -2,21 +2,26 @@
 
 ## What is the structure of the stacks-network repo?
 
-Repository location
-
 [https://github.com/stacks-network/stacks-blockchain](https://github.com/stacks-network/stacks-blockchain)
 
 Branches
 
-- master
-- next
-- develop
+- `master` - For hotfixes, branch off of master.
+- `next` - For consensus breaking changes, branch off of the next branch.
+- `develop` - For typical development, branch off of the develop branch.
 
-Cargo package structure
+Cargo packages
 
-- Top-level virtual manifest
+| Package Name | Cargo file location | Description
+| --- | --- | ---
+| `blockstack-core` | `/Cargo.toml` |
+| `clarity` | `/clarity/Cargo.toml` |
+| `stacks-node` | `/testnet/stacks-node/Cargo.toml` |
+| `stacks-common` | `/stacks-common/Cargo.toml` |
+| `stx-genesis` | `/stx-genesis/Cargo.toml` |
+| `puppet-chain` | `/tools/puppet-chain/Cargo.toml` |
 
-## How do I run test cases?
+## How do I run the test suite?
 
 ### Local tests
 
@@ -24,9 +29,11 @@ Cargo package structure
 cargo test --release --workspace -- --report-time -Z unstable-options
 ```
 
-### Continuous integration tests
+### Integration tests
 
 - Download Bitcoin <https://bitcoin.org/bin/bitcoin-core-0.20.0/>
+- The list of integration tests is here: <https://github.com/stacks-network/stacks-blockchain/blob/master/.github/workflows/bitcoin-tests.yml#L41>
+- All integration tests are tagged with `#[ignore]`
 
 ```
 PATH=$PATH:/path-to/bitcoin-22.0/bin
@@ -34,15 +41,23 @@ BITCOIND_TEST=1
 cargo test -p stacks-node -- --ignored "tests::neon_integrations::miner_submit_twice"
 ```
 
-## What are the test environments? mainnet/testnet, neon/krypton, and helium/mocknet
+## What are the different burnchain modes and run loops?
 
-Run Loops
-Neon
-Real burnchain.
-Helium
-Simulated burnchain and some simulated nodes taking turns in producing blocks.
+| Burnchain Mode | Run Loop | Bitcoin Network | Nickname | Notes |
+| --- | --- | --- | --- | ---
+| mainnet | Neon | mainnet | mainnet
+| xenon | Neon | testnet | testnet
+| neon | Neon | regtest | local
+| krypton | Neon | regtest | regtest
+| mocknet | Helium | regtest | mocknet
+| helium | Helium | regtest |
+| argon | Neon | regtest | | Unsupported by stacks-node
 
-Do not confuse burnchain modes neon and helium with run loops neon and helium.
+- Run Loops
+  - Neon - Uses a real burnchain node (Bitcoin)
+  - Heium - Simulated burnchain and some simulated nodes taking turns in producing blocks.
+
+Do not confuse burnchain modes **neon** and **helium** with run loops **Neon** and **Helium**.
 
 ## How do I run a mock miner?
 
@@ -66,39 +81,49 @@ Do not confuse burnchain modes neon and helium with run loops neon and helium.
 
 ## What is a microblock?
 
-## What sqlite db’s does stacks-node use?
+## What databases does stacks use?
 
-Sortition DB
-working_dir/mainnet/burnchain/sortition
-Chainstate DB
-working_dir/mainnet/chainstate
-TODO
+Database file location are relative to `working_directory/mainnet`
+
+| Database file location | Description
+| --- | ---
+| chainstate/estimates/fee_estimator_scalar_rate.sqlite | 
+| chainstate/estimates/cost_estimator_pessimistic.sqlite | 
+| chainstate/vm/index.sqlite | 
+| chainstate/vm/clarity/marf.sqlite | 
+| chainstate/mempool.sqlite | 
+| headers.sqlite | 
+| atlas.sqlite | 
+| peer.sqlite | 
+| burnchain/burnchain.sqlite | 
+| burnchain/sortition/marf.sqlite | 
 
 ## How do I explore the sqlite db’s?
 
-Install sqlite:
-Mac: brew install sqlite
+- Install sqlite:
+  - Mac: brew install sqlite
+- Run `sqlite3 mainnet/peer.sqlite`
 
-What threads does stacks-node spawn?
-Relayer thread
-Miner thread
-Chains coordinator
-TODO: list all threads under each run loop mode
+## What threads does stacks-node spawn?
 
-What are the typical log file entries for stacks-node?
+- Relayer thread
+- Miner thread
+- Chains coordinator
+
+## What are the typical log file entries for stacks-node?
+
 TODO: list frequency of log lines during bootstrap and during normal running conditions
 
 ## What are affirmation maps?
 
 PoX affirmation maps
 
-<https://gist.github.com/jcnelson/b1aa4bef8b9adb0856b28d3a933ef9a0>
-<https://github.com/stacks-network/stacks-blockchain/pull/2707>
+- <https://gist.github.com/jcnelson/b1aa4bef8b9adb0856b28d3a933ef9a0>
+- <https://github.com/stacks-network/stacks-blockchain/pull/2707>
 
 ## Where can I learn more about Stacks internals?
 
-Stacks 2.0 Internals
- <https://github.com/stacks-network/docs>
+Stacks 2.0 Internals <https://github.com/stacks-network/docs>
 
 ## How do I check the syntax of a Clarity smart contract?
 
