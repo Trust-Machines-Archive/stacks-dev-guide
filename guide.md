@@ -135,3 +135,11 @@ Stacks 2.0 Internals <https://github.com/stacks-network/docs>
 ## What is the difference between `src/vm_clarity` and `clarity/src`?
 
 The `clarity` directory is the Clarity VM, and it does not depend on any of the Stacks-specific data storage logic.  Instead, it defines the traits for a data storage system.  This is important, because the data store Stacks uses is bespoke and somewhat large and complex in order to efficiently deal with blockchain forks (it's described in SIP-004 if you're curious).  The `clarity_vm` directory contains the implementation for these traits that links the Clarity VM to Stacks' data store. This way, you can build clarity without building the Stacks blockchain.  This gets used to build clarinet for example.
+
+## How do I get testnet STX coins from the faucet?
+
+Visit https://explorer.stacks.co/sandbox/faucet?chain=testnet 
+
+The chain=testnet will configure testnet mode and also a url for the public testnet. The Networks tab can be used to add any url for an alternate stacks network. This was done for Stacks 2.1 testing because it was a hard-fork.
+
+
