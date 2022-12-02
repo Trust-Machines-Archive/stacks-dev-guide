@@ -147,16 +147,18 @@ The chain=testnet will configure testnet mode and also a url for the public test
 Pre-reqs
 - a stacks account
 - blockstack-cli
-  - built from stacks-blockchain sources
+  - build from stacks-blockchain source
 - base58 decoder
   - https://appdevtools.com/base58-encoder-decoder
 
-Generate the transaction. stack-stx function signature from See pox-2.clar.
+Generate the transaction. stack-stx function signature from pox-2.clar.
 
-  (stack-stx (amount-ustx uint)
-             (pox-addr (tuple (version (buff 1)) (hashbytes (buff 32))))
-             (start-burn-ht uint) ; must be a burn block height inside the next reward cycle
-             (lock-period uint)) ; number of reward cycles to lock for
+```
+(stack-stx (amount-ustx uint)
+           (pox-addr (tuple (version (buff 1)) (hashbytes (buff 32))))
+           (start-burn-ht uint) ; must be a burn block height inside the next reward cycle
+           (lock-period uint)) ; number of reward cycles to lock for
+```
 
 note on pox-addr: version values are in pox-2.clar. p2pkh = 1 (legacy address. 20 byte hashbytes). hashbytes come from base58 decoding the bitcoin address to a 25 byte/50 char hex string and removing the leading version byte and the four trailing checksum bytes. 
 
@@ -165,7 +167,7 @@ blockstack-cli --testnet contract-call <66 byte stx private key in hex> 300 3 ST
                 -e u5160000000000 -e '{version: 0x01, hashbytes: 0xe8b19d771ed4f3ab18dd5c8cc6fca3a2a1c31b61}' -e u2409274 -e u1  > tx.json
 ```
 
-Convert hex to binary and post to API URL /v2/transactions
+Convert hex output from blockstack-cli to binary and post to API URL `/v2/transactions`
 
 note: the http endpoint will ignore posts unless the content-type header is included and set for binary data.
 
@@ -178,9 +180,9 @@ Output is the tx id on success
 
 ## How do I make a call to a read-only function in a clarity contract?
 
-Because a call to a read-only function can be done instantly by any node and does not create a new transaction, it can be done with a siple http request. The payload specifies the stx address that is making the call to the function, and the arguments array contains strings of each serialized clarity value for each function parameter.
+A call to a read-only function in a clarity contract can be done instantly by any node and does not create a new transaction. Use the following http request. The payload specifies the stx address that is making the call to the function, and the arguments array contains strings of each serialized clarity value for each function parameter.
 
-One way to generate the serialized clarity value is to use https://github.com/jcnelson/stacks-node-cli and the encode function there.
+One way to generate the serialized clarity value is to use https://github.com/jcnelson/stacks-node-cli and the encode function.
 
 note: the http endpoint will ignore posts unless the content-type header is included and set for json.
 
