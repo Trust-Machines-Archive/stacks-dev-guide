@@ -148,7 +148,7 @@ Pre-reqs
 - a stacks account
 - blockstack-cli
   - built from stacks-blockchain sources
-- base58check decoder
+- base58 decoder
   - https://appdevtools.com/base58-encoder-decoder
 
 Generate the transaction. stack-stx function signature from See pox-2.clar.
@@ -158,10 +158,11 @@ Generate the transaction. stack-stx function signature from See pox-2.clar.
              (start-burn-ht uint) ; must be a burn block height inside the next reward cycle
              (lock-period uint)) ; number of reward cycles to lock for
 
-note on pox-addr: version values are in pox-2.clar. p2pkh = 1 (legacy address. 20 byte hashbytes).
+note on pox-addr: version values are in pox-2.clar. p2pkh = 1 (legacy address. 20 byte hashbytes). hashbytes come from base58 decoding the bitcoin address to a 25 byte/50 char hex string and removing the leading version byte and the four trailing checksum bytes. 
 
 ```
-blockstack-cli --testnet contract-call <66 byte stx private key in hex> 300 3 ST000000000000000000002AMW42H pox-2 stack-stx -e u5160000000000 -e '{version: 0x01, hashbytes: 0xe8b19d771ed4f3ab18dd5c8cc6fca3a2a1c31b61}' -e u2409274 -e u1  > tx.json
+blockstack-cli --testnet contract-call <66 byte stx private key in hex> 300 3 ST000000000000000000002AMW42H pox-2 stack-stx 
+                -e u5160000000000 -e '{version: 0x01, hashbytes: 0xe8b19d771ed4f3ab18dd5c8cc6fca3a2a1c31b61}' -e u2409274 -e u1  > tx.json
 ```
 
 Convert hex to binary and post to API URL /v2/transactions
@@ -181,6 +182,17 @@ One way to generate the serialized clarity value is to use https://github.com/jc
 
 ```
 curl https://2-1-api.testnet.hiro.so/v2/contracts/call-read/ST000000000000000000002AMW42H/pox-2/get-total-ustx-stacked -d '{"sender":"ST3MB37BQ3VAF7ARRVNE8SHQWMEHA3GRVC6QCSB7M", "arguments": ["0100000000000000000000000000000001"]}' -H "content-type: application/json" => {"okay":true,"result":"0x0100000000000000000000000000000000"}
+```
+
+## How do I get the hashbytes for a pox-addr from bitcoin compressed public key bytes?
+
+btc public Key (compressed, 1 even/odd marker plus 32 bytes. 66 hex characters): 02048D1783065CE86FAE4B2DC67B9455EFF8B0D1F5D3BB63E9E2FFDDB4A921970D
+```
+$ echo 02048D1783065CE86FAE4B2DC67B9455EFF8B0D1F5D3BB63E9E2FFDDB4A921970D  | xxd -r -p | sha256sum
+be6f7f08c8c8d0ff9cb47483a7d24bc984e4381c0057b7b16c315f212c46f0a0  -
+$ cargo install digester --all-features
+$ echo be6f7f08c8c8d0ff9cb47483a7d24bc984e4381c0057b7b16c315f212c46f0a0  | xxd -r -p |  digester -a ripemd160
+e8b19d771ed4f3ab18dd5c8cc6fca3a2a1c31b61
 ```
 
 
