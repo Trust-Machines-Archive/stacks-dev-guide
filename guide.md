@@ -167,6 +167,8 @@ blockstack-cli --testnet contract-call <66 byte stx private key in hex> 300 3 ST
 
 Convert hex to binary and post to API URL /v2/transactions
 
+note: the http endpoint will ignore posts unless the content-type header is included and set for binary data.
+
 ```
 cat tx.json | xxd -r -p | curl --data-binary @- -H "content-type: application/octet-stream" http://2-1-seed.testnet.hiro.so:20443/v2/transactions
 ```
@@ -180,8 +182,12 @@ Because a call to a read-only function can be done instantly by any node and doe
 
 One way to generate the serialized clarity value is to use https://github.com/jcnelson/stacks-node-cli and the encode function there.
 
+note: the http endpoint will ignore posts unless the content-type header is included and set for json.
+
 ```
-curl https://2-1-api.testnet.hiro.so/v2/contracts/call-read/ST000000000000000000002AMW42H/pox-2/get-total-ustx-stacked -d '{"sender":"ST3MB37BQ3VAF7ARRVNE8SHQWMEHA3GRVC6QCSB7M", "arguments": ["0100000000000000000000000000000001"]}' -H "content-type: application/json" => {"okay":true,"result":"0x0100000000000000000000000000000000"}
+$ curl https://2-1-api.testnet.hiro.so/v2/contracts/call-read/ST000000000000000000002AMW42H/pox-2/get-total-ustx-stacked 
+           -d '{"sender":"ST3MB37BQ3VAF7ARRVNE8SHQWMEHA3GRVC6QCSB7M", "arguments": ["0100000000000000000000000000000001"]}' -H "content-type: application/json"
+{"okay":true,"result":"0x0100000000000000000000000000000000"}
 ```
 
 ## How do I get the hashbytes for a pox-addr from bitcoin compressed public key bytes?
