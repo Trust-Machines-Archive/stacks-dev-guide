@@ -142,4 +142,45 @@ Visit https://explorer.stacks.co/sandbox/faucet?chain=testnet
 
 The chain=testnet will configure testnet mode and also a url for the public testnet. The Networks tab can be used to add any url for an alternate stacks network. This was done for Stacks 2.1 testing because it was a hard-fork.
 
+## How do I stack stx from the commandline?
+
+Pre-reqs
+- a stacks account
+- blockstack-cli
+  - built from stacks-blockchain sources
+- base58check decoder
+  - https://appdevtools.com/base58-encoder-decoder
+
+Generate the transaction. stack-stx function signature from See pox-2.clar.
+
+  (stack-stx (amount-ustx uint)
+             (pox-addr (tuple (version (buff 1)) (hashbytes (buff 32))))
+             (start-burn-ht uint) ; must be a burn block height inside the next reward cycle
+             (lock-period uint)) ; number of reward cycles to lock for
+
+note on pox-addr: version values are in pox-2.clar. p2pkh = 1 (legacy address. 20 byte hashbytes).
+
+```
+blockstack-cli --testnet contract-call <66 byte stx private key in hex> 300 3 ST000000000000000000002AMW42H pox-2 stack-stx -e u5160000000000 -e '{version: 0x01, hashbytes: 0xe8b19d771ed4f3ab18dd5c8cc6fca3a2a1c31b61}' -e u2409274 -e u1  > tx.json
+```
+
+Convert hex to binary and post to API URL /v2/transactions
+
+```
+cat tx.json | xxd -r -p | curl --data-binary @- -H "content-type: application/octet-stream" http://2-1-seed.testnet.hiro.so:20443/v2/transactions
+```
+
+Output is the tx id on success
+"0b4774132f3252dfc242a05178691eb06c98fb5e8295917e67e501f9d44764e2"
+
+## How do I make a call to a read-only function in a clarity contract?
+
+Because a call to a read-only function can be done instantly by any node and does not create a new transaction, it can be done with a siple http request. The payload specifies the stx address that is making the call to the function, and the arguments array contains strings of each serialized clarity value for each function parameter.
+
+One way to generate the serialized clarity value is to use https://github.com/jcnelson/stacks-node-cli and the encode function there.
+
+```
+curl https://2-1-api.testnet.hiro.so/v2/contracts/call-read/ST000000000000000000002AMW42H/pox-2/get-total-ustx-stacked -d '{"sender":"ST3MB37BQ3VAF7ARRVNE8SHQWMEHA3GRVC6QCSB7M", "arguments": ["0100000000000000000000000000000001"]}' -H "content-type: application/json" => {"okay":true,"result":"0x0100000000000000000000000000000000"}
+```
+
 
