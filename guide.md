@@ -41,6 +41,13 @@ BITCOIND_TEST=1
 cargo test -p stacks-node -- --ignored "tests::neon_integrations::miner_submit_twice"
 ```
 
+### Clarity core contract tests
+- [Install clarinet](https://book.clarity-lang.org/ch01-01-installing-tools.html)
+- Run the following command from the project root
+```
+clarinet test --coverage --manifest-path=./contrib/core-contract-tests/Clarinet.toml
+```
+
 ## What are the different burnchain modes and run loops?
 
 | Burnchain Mode | Run Loop | Bitcoin Network | Nickname | Notes |
