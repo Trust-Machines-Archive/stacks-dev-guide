@@ -15,7 +15,7 @@ npm install @stacks/network
 This tutorial will assume the following contract lives in a file `hello-world.clar` in our working directory.
 Replace file with whichever contract you wish to deploy.
 ```clarity
-(define-read-only (greet (name (string-ascii 20)))
+(define-public (greet (name (string-ascii 20)))
   (concat (concat "Hello, " name) "!")
 )
 ```
