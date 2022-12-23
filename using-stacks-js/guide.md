@@ -79,6 +79,8 @@ node deploy.mjs
 Make sure to observe the result of broadcasting the transaction.
 The broadcast can fail for many reasons. Common ones include
 
+- The contract already exists. This should happen if you try to deploy `hello-world` with the key in this tutorial.
+  To circumvent the issue, you may rename the contract before publishing.
 - Errors in the smart contract.
 - The fee is too low.
 - The stx account has insufficient funds.
