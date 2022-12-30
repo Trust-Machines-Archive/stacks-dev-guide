@@ -75,8 +75,7 @@ Sortition is the process of selecting a principal to commit a block to the Stack
 blockchain. The process looks slightly different in *proof of burn* (PoB) and
 *proof of transfer* (PoX).
 
-*In PoB*
-In *proof of burn*, miners candidate to have their principals be the leader
+**In *proof of burn***, miners candidate to have their principals be the leader
 of an epoch by burning tokens on the burn chain, e.g. Bitcoin. The
 leader is then selected through a *verifiable random function* (VRF). The VRF
 has the following properties
@@ -86,8 +85,7 @@ has the following properties
 - The output of the VRF cannot be predicted before the burn transaction has been
   included in a block.
 
-*In PoX*
-*Proof of transfer* extends *Proof of burn* by instead of burning tokens to candidate,
+***Proof of transfer*** extends *Proof of burn* by instead of burning tokens to candidate,
 miners transfer tokens to addresses of STX holders who participate in stacking. The
 remainder of the sortition process remains the same as in PoB.
 
