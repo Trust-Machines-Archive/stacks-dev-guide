@@ -71,16 +71,42 @@ Do not confuse burnchain modes **neon** and **helium** with run loops **Neon** a
 ## What is testnet?
 
 ## What is sortition?
+Sortition is the process of selecting a principal to commit a block to the Stacks
+blockchain. The process looks slightly different in *proof of burn* (PoB) and
+*proof of transfer* (PoX).
 
-## What are tenures?
+*In PoB*
+In *proof of burn*, miners candidate to have their principals be the leader
+of a block by burning tokens on the burn chain, e.g. Bitcoin. The
+leader is then selected through a *verifiable random function* (VRF). The VRF
+has the following properties
+
+- The likelihood of a principal to be elected is proportional to the amount of
+  tokens the principal has burned.
+- The output of the VRF cannot be predicted before the burn transaction has been
+  included in a block.
+
+*In PoX*
+
+## What is a tenure?
+A tenure is the period during which an elected leader propagates transaction data.
+The tenure is terminated when a new burn chain block arrives.
 
 ## What are epochs?
+Epochs in the Stacks blockchain correspond to the leader and leader candidate state
+during a block in the underlying burnchain.
 
 ## What are reward cycles?
 
 ## What is PoX anchor block?
 
-## What is anchor block?
+## What is an anchor block?
+The Stacks blockchain consists for two main types of blocks,
+anchor blocks and microblocks. The anchor blocks are directly
+committed on the underlying burnchain through leader block commits.
+
+An anchor block is a block in the Stacks blockchain anchored in the
+underlying burnchain (Bitcoin) through a leader block commit.
 
 ## How is PoX anchor block different from anchor block?
 
