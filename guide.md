@@ -77,7 +77,7 @@ blockchain. The process looks slightly different in *proof of burn* (PoB) and
 
 *In PoB*
 In *proof of burn*, miners candidate to have their principals be the leader
-of a block by burning tokens on the burn chain, e.g. Bitcoin. The
+of an epoch by burning tokens on the burn chain, e.g. Bitcoin. The
 leader is then selected through a *verifiable random function* (VRF). The VRF
 has the following properties
 
@@ -87,6 +87,9 @@ has the following properties
   included in a block.
 
 *In PoX*
+*Proof of transfer* extends *Proof of burn* by instead of burning tokens to candidate,
+miners transfer tokens to addresses of STX holders who participate in stacking. The
+remainder of the sortition process remains the same as in PoB.
 
 ## What is a tenure?
 A tenure is the period during which an elected leader propagates transaction data.
@@ -97,8 +100,21 @@ Epochs in the Stacks blockchain correspond to the leader and leader candidate st
 during a block in the underlying burnchain.
 
 ## What are reward cycles?
+A reward cycle is a set of epochs divided into two phases:
 
-## What is PoX anchor block?
+1. Prepare phase: The PoX anchor block and reward set is determined.
+2. Reward phase: Mining any descendant of the anchor block requires burn chain tokens
+                 to be transferred to members of the reward set.
+
+## What is a PoX anchor block?
+A PoX anchor block is a block on the Stacks chain which determines the reward set for
+a reward cycle. During a reward cycle, mining any descendant of the anchor block requires
+transferring burn chain tokens to members of the reward set.
+
+The anchor block is determined during the prepare phase as the latest ancestor before
+the phase with at least `F*w` confirmations, where `F` is a proper fraction larger than 0.5
+and `w` is the number of blocks in the prepare phase. This ensures that at most one PoX
+anchor block exists per reward cycle.
 
 ## What is an anchor block?
 The Stacks blockchain consists for two main types of blocks,
@@ -108,11 +124,23 @@ committed on the underlying burnchain through leader block commits.
 An anchor block is a block in the Stacks blockchain anchored in the
 underlying burnchain (Bitcoin) through a leader block commit.
 
-## How is PoX anchor block different from anchor block?
+## How is a PoX anchor block different from an anchor block?
+A PoX anchor block is a special block in a reward cycle.
+This block is also an anchor block in the sense that this block is visible on
+the burnchain in a leader block commit, i.e. it is not a microblock. A reward cycle
+typically contains many anchor blocks, but at most one PoX anchor block.
 
 ## What is index block hash vs block hash?
 
 ## What is a microblock?
+Between anchor blocks, the leader of an epoch may stream transactions in microblocks
+to enable low latency confirmations of transactions. These blocks contain transactions
+and are similar to normal blockchain blocks.
+
+To incentivise leaders of subsequent epochs
+to build on top of the latest microblock rather than ignoring these and build on the latest
+anchor block, a fraction of the block reward for a microblock is distributed to the leader of the next
+anchor block.
 
 ## What databases does stacks use?
 
