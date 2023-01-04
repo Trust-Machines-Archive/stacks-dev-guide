@@ -71,9 +71,11 @@ Do not confuse burnchain modes **neon** and **helium** with run loops **Neon** a
 ## What is testnet?
 
 ## What is sortition?
-Sortition is the process of selecting a principal to commit a block to the Stacks
-blockchain. The process looks slightly different in *proof of burn* (PoB) and
-*proof of transfer* (PoX).
+Sortition is the process of selecting a miner principal to broadcast block data
+to the stacks nodes for the next winning block. Before candidating, miners must
+commit the chain tip they're building on and the hash of the block they intend
+to broadcast if they win. The details of the process looks slightly different
+in *proof of burn* (PoB) and *proof of transfer* (PoX).
 
 **In *proof of burn***, miners candidate to have their principals be the leader
 of an epoch by burning tokens on the burn chain, e.g. Bitcoin. The
@@ -89,9 +91,16 @@ has the following properties
 miners transfer tokens to addresses of STX holders who participate in stacking. The
 remainder of the sortition process remains the same as in PoB.
 
+Sortition is defined in SIP-001
+[here](https://github.com/stacksgov/sips/blob/main/sips/sip-001/sip-001-burn-election.md#step-3-sortition).
+The PoX adaptation is defined in [SIP-007](https://github.com/stacksgov/sips/blob/main/sips/sip-007/sip-007-stacking-consensus.md).
+
 ## What is a tenure?
 A tenure is the period during which an elected leader propagates transaction data.
 The tenure is terminated when a new burn chain block arrives.
+
+For more details, see the tenure implementation in the stacks blockchain
+[here](https://github.com/stacks-network/stacks-blockchain/blob/master/testnet/stacks-node/src/tenure.rs#L26).
 
 ## What are epochs?
 Epochs in the Stacks blockchain correspond to the leader and leader candidate state
