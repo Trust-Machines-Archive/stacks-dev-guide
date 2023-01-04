@@ -1,6 +1,8 @@
 # How to upload and run a smart contract with [stacks.js](https://github.com/hirosystems/stacks.js)
 The goal of this tutorial is to showcase how to use `stacks.js` to upload a smart contract to the stacks 2.1 testnet.
 
+The complete API:s of all `stacks.js` packages are documented [here](https://stacks.js.org/).
+
 ## Prerequisites
 To follow this tutorial, you need [Node.js](https://nodejs.org/en/) installed.
 We also need to install the Stacks.js transactions and networks packages
@@ -132,6 +134,14 @@ If you have been quick, you might get the transaction rejected due to `NoSuchCon
 transaction may take a while to be mined. You can see pending transactions if you search for the address you deployed your contract with in
 the explorer. Here's the [link for the example key address](https://explorer.stacks.co/address/STJ8F4BTN3YFG60TRTEPCG6QZXAM2A8EMDKCYDF7?chain=testnet&api=https://2-1-api.testnet.hiro.so).
 
-# Step 6: Take a break 🧘
+# Step 6: Are we confirmed yet?
+Transactions typically take a while to be confirmed on the blockchain. The easiest way to poll the status of a transaction is sending a POST request
+to a stacks node directly using the [blockchain API](https://docs.hiro.so/api). Here's an example using curl:
+
+```
+curl -sL https://2-1-api.testnet.hiro.so/extended/v1/tx/$TXID |  jq .tx_status
+```
+
+# Step 7: Take a break 🧘
 You have now completed this tutorial. Good job! Reward yourself with a cold shower or anything else that increases your dopamine levels.
 High dopamine levels support your brain in forming memories, and will make you remember this tutorial better.
