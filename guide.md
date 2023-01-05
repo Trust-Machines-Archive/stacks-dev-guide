@@ -103,8 +103,13 @@ For more details, see the tenure implementation in the stacks blockchain
 [here](https://github.com/stacks-network/stacks-blockchain/blob/master/testnet/stacks-node/src/tenure.rs#L26).
 
 ## What are epochs?
-Epochs in the Stacks blockchain correspond to the leader and leader candidate state
-during a block in the underlying burnchain.
+Epoch may refer to two things
+
+1. The leader and leader candidate state during a block in the underlying burnchain,
+as defined in [SIP-001](https://github.com/stacksgov/sips/blob/main/sips/sip-001/sip-001-burn-election.md#definitions)
+
+2. A significant period in the blockchain's history beginning with a hard fork. The
+current epochs are defined [here](https://github.com/stacks-network/stacks-blockchain/blob/master/stacks-common/src/types/mod.rs#L69).
 
 ## What are reward cycles?
 A reward cycle is a set of epochs divided into two phases:
