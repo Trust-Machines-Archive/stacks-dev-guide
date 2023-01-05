@@ -118,6 +118,9 @@ A reward cycle is a set of epochs divided into two phases:
 2. Reward phase: Mining any descendant of the anchor block requires burn chain tokens
                  to be transferred to members of the reward set.
 
+Reward cycles are defined in SIP-007
+[here](https://github.com/stacksgov/sips/blob/main/sips/sip-007/sip-007-stacking-consensus.md#stacking-consensus-algorithm).
+
 ## What is a PoX anchor block?
 A PoX anchor block is a block on the Stacks chain which determines the reward set for
 a reward cycle. During a reward cycle, mining any descendant of the anchor block requires
@@ -128,6 +131,9 @@ the phase with at least `F*w` confirmations, where `F` is a proper fraction larg
 and `w` is the number of blocks in the prepare phase. This ensures that at most one PoX
 anchor block exists per reward cycle.
 
+PoX anchor blocks are defined in SIP-007
+[here](https://github.com/stacksgov/sips/blob/main/sips/sip-007/sip-007-stacking-consensus.md#stacking-consensus-algorithm).
+
 ## What is an anchor block?
 The Stacks blockchain consists for two main types of blocks,
 anchor blocks and microblocks. The anchor blocks are directly
@@ -135,6 +141,9 @@ committed on the underlying burnchain through leader block commits.
 
 An anchor block is a block in the Stacks blockchain anchored in the
 underlying burnchain (Bitcoin) through a leader block commit.
+
+The term is not used in SIP-001 but occurs in the stacks documentation
+[here](https://docs.stacks.co/docs/understand-stacks/technical-specs#stacking).
 
 ## How is a PoX anchor block different from an anchor block?
 A PoX anchor block is a special block in a reward cycle.
@@ -153,6 +162,9 @@ To incentivise leaders of subsequent epochs
 to build on top of the latest microblock rather than ignoring these and build on the latest
 anchor block, a fraction of the block reward for a microblock is distributed to the leader of the next
 anchor block.
+
+Microblocks are defined in SIP-001
+[here](https://github.com/stacksgov/sips/blob/main/sips/sip-001/sip-001-burn-election.md#specification).
 
 ## What databases does stacks use?
 
