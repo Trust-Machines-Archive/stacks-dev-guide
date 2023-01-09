@@ -32,7 +32,7 @@ cargo test --release --workspace -- --report-time -Z unstable-options
 ### Integration tests
 
 - Download Bitcoin <https://bitcoin.org/bin/bitcoin-core-0.20.0/>
-- The list of integration tests is here: <https://github.com/stacks-network/stacks-blockchain/blob/master/.github/workflows/bitcoin-tests.yml#L41>
+- The list of integration tests is here: <https://github.com/stacks-network/stacks-blockchain/blob/8da076e7c72f3d743caecfd12a9b32496f0a236c/.github/workflows/bitcoin-tests.yml#L41>
 - All integration tests are tagged with `#[ignore]`
 
 ```
@@ -93,23 +93,23 @@ remainder of the sortition process remains the same as in PoB.
 
 Sortition is defined in SIP-001
 [here](https://github.com/stacksgov/sips/blob/main/sips/sip-001/sip-001-burn-election.md#step-3-sortition).
-The PoX adaptation is defined in [SIP-007](https://github.com/stacksgov/sips/blob/main/sips/sip-007/sip-007-stacking-consensus.md).
+The PoX adaptation is defined in [SIP-007](https://github.com/stacksgov/sips/blob/506085f5da4fe5e1bee8e6387638950501361503/sips/sip-007/sip-007-stacking-consensus.md).
 
 ## What is a tenure?
 A tenure is the period during which an elected leader propagates transaction data.
 The tenure is terminated when a new burn chain block arrives.
 
 For more details, see the tenure implementation in the stacks blockchain
-[here](https://github.com/stacks-network/stacks-blockchain/blob/master/testnet/stacks-node/src/tenure.rs#L26).
+[here](https://github.com/stacks-network/stacks-blockchain/blob/8da076e7c72f3d743caecfd12a9b32496f0a236c/testnet/stacks-node/src/tenure.rs#L26).
 
 ## What are epochs?
 Epoch may refer to two things
 
 1. The leader and leader candidate state during a block in the underlying burnchain,
-as defined in [SIP-001](https://github.com/stacksgov/sips/blob/main/sips/sip-001/sip-001-burn-election.md#definitions)
+as defined in [SIP-001](https://github.com/stacksgov/sips/blob/506085f5da4fe5e1bee8e6387638950501361503/sips/sip-001/sip-001-burn-election.md#definitions)
 
 2. A significant period in the blockchain's history beginning with a hard fork. The
-current epochs are defined [here](https://github.com/stacks-network/stacks-blockchain/blob/master/stacks-common/src/types/mod.rs#L69).
+current epochs are defined [here](https://github.com/stacks-network/stacks-blockchain/blob/8da076e7c72f3d743caecfd12a9b32496f0a236c/stacks-common/src/types/mod.rs#L69).
 
 ## What are reward cycles?
 A reward cycle is a set of epochs divided into two phases:
@@ -132,7 +132,7 @@ and `w` is the number of blocks in the prepare phase. This ensures that at most 
 anchor block exists per reward cycle.
 
 PoX anchor blocks are defined in SIP-007
-[here](https://github.com/stacksgov/sips/blob/main/sips/sip-007/sip-007-stacking-consensus.md#stacking-consensus-algorithm).
+[here](https://github.com/stacksgov/sips/blob/506085f5da4fe5e1bee8e6387638950501361503/sips/sip-007/sip-007-stacking-consensus.md#stacking-consensus-algorithm).
 
 ## What is an anchor block?
 The Stacks blockchain consists for two main types of blocks,
@@ -164,7 +164,7 @@ anchor block, a fraction of the block reward for a microblock is distributed to 
 anchor block.
 
 Microblocks are defined in SIP-001
-[here](https://github.com/stacksgov/sips/blob/main/sips/sip-001/sip-001-burn-election.md#specification).
+[here](https://github.com/stacksgov/sips/blob/506085f5da4fe5e1bee8e6387638950501361503/sips/sip-001/sip-001-burn-election.md#specification).
 
 ## What databases does stacks use?
 
