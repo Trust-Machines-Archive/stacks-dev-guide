@@ -32,7 +32,7 @@ cargo test --release --workspace -- --report-time -Z unstable-options
 ### Integration tests
 
 - Download Bitcoin <https://bitcoin.org/bin/bitcoin-core-0.20.0/>
-- The list of integration tests is here: <https://github.com/stacks-network/stacks-blockchain/blob/master/.github/workflows/bitcoin-tests.yml#L41>
+- The list of integration tests is here: <https://github.com/stacks-network/stacks-blockchain/blob/8da076e7c72f3d743caecfd12a9b32496f0a236c/.github/workflows/bitcoin-tests.yml#L41>
 - All integration tests are tagged with `#[ignore]`
 
 ```
@@ -71,22 +71,100 @@ Do not confuse burnchain modes **neon** and **helium** with run loops **Neon** a
 ## What is testnet?
 
 ## What is sortition?
+Sortition is the process of selecting a miner principal to broadcast block data
+to the stacks nodes for the next winning block. Before candidating, miners must
+commit the chain tip they're building on and the hash of the block they intend
+to broadcast if they win. The details of the process looks slightly different
+in *proof of burn* (PoB) and *proof of transfer* (PoX).
 
-## What are tenures?
+**In *proof of burn***, miners candidate to have their principals be the leader
+of an epoch by burning tokens on the burn chain, e.g. Bitcoin. The
+leader is then selected through a *verifiable random function* (VRF). The VRF
+has the following properties
+
+- The likelihood of a principal to be elected is proportional to the amount of
+  tokens the principal has burned.
+- The output of the VRF cannot be predicted before the burn transaction has been
+  included in a block.
+
+***Proof of transfer*** extends *Proof of burn* by instead of burning tokens to candidate,
+miners transfer tokens to addresses of STX holders who participate in stacking. The
+remainder of the sortition process remains the same as in PoB.
+
+Sortition is defined in SIP-001
+[here](https://github.com/stacksgov/sips/blob/main/sips/sip-001/sip-001-burn-election.md#step-3-sortition).
+The PoX adaptation is defined in [SIP-007](https://github.com/stacksgov/sips/blob/506085f5da4fe5e1bee8e6387638950501361503/sips/sip-007/sip-007-stacking-consensus.md).
+
+## What is a tenure?
+A tenure is the period during which an elected leader propagates transaction data.
+The tenure is terminated when a new burn chain block arrives.
+
+For more details, see the tenure implementation in the stacks blockchain
+[here](https://github.com/stacks-network/stacks-blockchain/blob/8da076e7c72f3d743caecfd12a9b32496f0a236c/testnet/stacks-node/src/tenure.rs#L26).
 
 ## What are epochs?
+Epoch may refer to two things
+
+1. The leader and leader candidate state during a block in the underlying burnchain,
+as defined in [SIP-001](https://github.com/stacksgov/sips/blob/506085f5da4fe5e1bee8e6387638950501361503/sips/sip-001/sip-001-burn-election.md#definitions)
+
+2. A significant period in the blockchain's history beginning with a hard fork. The
+current epochs are defined [here](https://github.com/stacks-network/stacks-blockchain/blob/8da076e7c72f3d743caecfd12a9b32496f0a236c/stacks-common/src/types/mod.rs#L69).
 
 ## What are reward cycles?
+A reward cycle is a set of epochs divided into two phases:
 
-## What is PoX anchor block?
+1. Prepare phase: The PoX anchor block and reward set is determined.
+2. Reward phase: Mining any descendant of the anchor block requires burn chain tokens
+                 to be transferred to members of the reward set.
 
-## What is anchor block?
+Reward cycles are defined in SIP-007
+[here](https://github.com/stacksgov/sips/blob/main/sips/sip-007/sip-007-stacking-consensus.md#stacking-consensus-algorithm).
 
-## How is PoX anchor block different from anchor block?
+## What is a PoX anchor block?
+A PoX anchor block is a block on the Stacks chain which determines the reward set for
+a reward cycle. During a reward cycle, mining any descendant of the anchor block requires
+transferring burn chain tokens to members of the reward set.
+
+The anchor block is determined during the prepare phase as the latest ancestor before
+the phase with at least `F*w` confirmations, where `F` is a proper fraction larger than 0.5
+and `w` is the number of blocks in the prepare phase. This ensures that at most one PoX
+anchor block exists per reward cycle.
+
+PoX anchor blocks are defined in SIP-007
+[here](https://github.com/stacksgov/sips/blob/506085f5da4fe5e1bee8e6387638950501361503/sips/sip-007/sip-007-stacking-consensus.md#stacking-consensus-algorithm).
+
+## What is an anchor block?
+The Stacks blockchain consists for two main types of blocks,
+anchor blocks and microblocks. The anchor blocks are directly
+committed on the underlying burnchain through leader block commits.
+
+An anchor block is a block in the Stacks blockchain anchored in the
+underlying burnchain (Bitcoin) through a leader block commit.
+
+The term is not used in SIP-001 but occurs in the stacks documentation
+[here](https://docs.stacks.co/docs/understand-stacks/technical-specs#stacking).
+
+## How is a PoX anchor block different from an anchor block?
+A PoX anchor block is a special block in a reward cycle.
+This block is also an anchor block in the sense that this block is visible on
+the burnchain in a leader block commit, i.e. it is not a microblock. A reward cycle
+typically contains many anchor blocks, but at most one PoX anchor block.
 
 ## What is index block hash vs block hash?
 
 ## What is a microblock?
+Between anchor blocks, the leader of an epoch may stream transactions in microblocks
+to enable low latency confirmations of transactions. These blocks contain transactions
+and are similar to normal blockchain blocks.
+
+To incentivise leaders of subsequent epochs
+to build on top of the latest microblock rather than ignoring these and build on the latest
+anchor block, a fraction of the block reward for a microblock is distributed to the leader of the next
+anchor block.
+
+Microblocks are defined in SIP-001
+[here](https://github.com/stacksgov/sips/blob/506085f5da4fe5e1bee8e6387638950501361503/sips/sip-001/sip-001-burn-election.md#specification).
 
 ## What databases does stacks use?
 
